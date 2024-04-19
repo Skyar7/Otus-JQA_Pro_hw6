@@ -9,9 +9,159 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <junit.version>5.10.2</junit.version>
+        <log4j-core.version>2.17.1</log4j-core.version>
+        <log4j-slf4j2-impl.version>2.20.0</log4j-slf4j2-impl.version>
+        <selenide.version>7.2.2</selenide.version>
+        <guice.version>7.0.0</guice.version>
+        <allure-junit5.version>2.14.0</allure-junit5.version>
+        <aspectj.version>1.9.22</aspectj.version>
+
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+        <spotbugs-maven-plugin.version>4.8.2.0</spotbugs-maven-plugin.version>
+        <spotbugs.version>4.8.3</spotbugs.version>
+        <maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
+
+        <device.name>Selenoid</device.name>
+        <platform.name>Android</platform.name>
+        <platform.version>5.1</platform.version>
+        <remote.url>http://127.0.0.1/wd/hub</remote.url>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j-core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+            <version>${log4j-slf4j2-impl.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide</artifactId>
+            <version>${selenide.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide-appium</artifactId>
+            <version>${selenide.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>${guice.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit5</artifactId>
+            <version>${allure-junit5.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <showDeprecation>true</showDeprecation>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <properties>
+                        <configurationParameters>
+    <!--                        junit.jupiter.execution.parallel.enabled = true-->
+    <!--                        junit.jupiter.execution.parallel.mode.default = concurrent-->
+                        </configurationParameters>
+                    </properties>
+                    <systemProperties>
+                        <device.name>${device.name}</device.name>
+                        <platform.name>${platform.name}</platform.name>
+                        <platform.version>${platform.version}</platform.version>
+                        <remote.url>${remote.url}</remote.url>
+                        <property>
+                            <name>allure.results.directory</name>
+                            <value>${project.basedir}/allure-results</value>
+                        </property>
+                        <property>
+                            <name>junit.jupiter.extensions.autodetection.enabled</name>
+                            <value>true</value>
+                        </property>
+                        <property>
+                            <name>listener</name>
+                            <value>io.qameta.allure.junit5.AllureJunit5</value>
+                        </property>
+                    </systemProperties>
+                    <argLine>
+                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                    </argLine>
+                </configuration>
+            </plugin>
+
+    <!--        <plugin>-->
+    <!--            <groupId>org.apache.maven.plugins</groupId>-->
+    <!--            <artifactId>maven-checkstyle-plugin</artifactId>-->
+    <!--            <version>${maven-checkstyle-plugin.version}</version>-->
+    <!--            <configuration>-->
+    <!--                <includeTestSourceDirectory>true</includeTestSourceDirectory>-->
+    <!--                <configLocation>${project.build.sourceDirectory}/../resources/checkstyle.xml</configLocation>-->
+    <!--            </configuration>-->
+    <!--            <executions>-->
+    <!--                <execution>-->
+    <!--                    <id>analyze-compile</id>-->
+    <!--                    <phase>compile</phase>-->
+    <!--                    <goals>-->
+    <!--                        <goal>check</goal>-->
+    <!--                    </goals>-->
+    <!--                </execution>-->
+    <!--            </executions>-->
+    <!--        </plugin>-->
+
+    <!--        <plugin>-->
+    <!--            <groupId>com.github.spotbugs</groupId>-->
+    <!--            <artifactId>spotbugs-maven-plugin</artifactId>-->
+    <!--            <version>${spotbugs-maven-plugin.version}</version>-->
+    <!--            <dependencies>-->
+    <!--                <dependency>-->
+    <!--                    <groupId>com.github.spotbugs</groupId>-->
+    <!--                    <artifactId>spotbugs</artifactId>-->
+    <!--                    <version>${spotbugs.version}</version>-->
+    <!--                </dependency>-->
+    <!--            </dependencies>-->
+    <!--        </plugin>-->
+        </plugins>
+    </build>
 </project>
