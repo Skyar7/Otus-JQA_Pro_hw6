@@ -1,5 +1,6 @@
 package components;
 
+import annotations.Component;
 import com.google.inject.Inject;
 import data.MenuSectionsData;
 import pages.AbsBasePage;
@@ -7,7 +8,8 @@ import pages.ChatPage;
 import pages.ExercisePage;
 import pages.StatsPage;
 
-public class MainMenuComponent extends AbsBasePage {
+@Component("id:menu")
+public class MenuComponent extends AbsBasePage<MenuComponent> {
 
   @Inject
   ChatPage chatPage;
@@ -18,7 +20,7 @@ public class MainMenuComponent extends AbsBasePage {
   @Inject
   StatsPage statsPage;
 
-  public MainMenuComponent mainMenuItemVisible(MenuSectionsData menuSections) {
+  public MenuComponent menuItemVisible(MenuSectionsData menuSections) {
     isPresent(menuSections.getName());
     return this;
   }

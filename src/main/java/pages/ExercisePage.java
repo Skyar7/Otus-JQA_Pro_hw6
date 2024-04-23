@@ -1,20 +1,20 @@
 package pages;
 
 import com.google.inject.Inject;
-import components.MainMenuComponent;
+import components.MenuComponent;
 import data.MenuSectionsData;
 import modules.GuiceComponentsModule;
 
 public class ExercisePage extends AbsBasePage<ExercisePage> {
 
   @Inject
-  MainMenuComponent mainMenuComponent = new GuiceComponentsModule().getMainMenuComponent();
+  MenuComponent menuComponent = new GuiceComponentsModule().getMainMenuComponent();
 
   @Inject
   ExercisePage exercisePage;
 
   public ChatPage clickStart() {
-    mainMenuComponent.mainMenuItemVisible(MenuSectionsData.EXERCISE);
+    menuComponent.menuItemVisible(MenuSectionsData.EXERCISE);
     click("Start");
     return new ChatPage();
   }

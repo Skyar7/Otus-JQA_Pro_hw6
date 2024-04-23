@@ -1,8 +1,8 @@
 package pages;
 
 import com.google.inject.Inject;
-import components.ChatWindowComponent;
-import components.MainMenuComponent;
+import components.ChatComponent;
+import components.MenuComponent;
 import data.MenuSectionsData;
 import modules.GuiceComponentsModule;
 import modules.GuicePagesModule;
@@ -10,10 +10,10 @@ import modules.GuicePagesModule;
 public class ChatPage extends AbsBasePage<ChatPage> {
 
   @Inject
-  MainMenuComponent mainMenuComponent = new GuiceComponentsModule().getMainMenuComponent();
+  MenuComponent menuComponent = new GuiceComponentsModule().getMainMenuComponent();
 
   @Inject
-  ChatWindowComponent chatWindowComponent = new GuiceComponentsModule().getChatWindowComponent();
+  ChatComponent chatComponent = new GuiceComponentsModule().getChatWindowComponent();
 
   @Inject
   ExercisePage exercisePage = new GuicePagesModule().getExercisePage();
@@ -22,22 +22,22 @@ public class ChatPage extends AbsBasePage<ChatPage> {
   StatsPage statsPage = new GuicePagesModule().getStatsPage();
 
   public ChatPage sendMessage(String text) {
-    chatWindowComponent.sendMessage(text);
+    chatComponent.sendMessage(text);
     return this;
   }
 
   public ChatPage checkChatbotResponse(String statement) {
-    chatWindowComponent.checkChatbotResponse(statement);
+    chatComponent.checkChatbotResponse(statement);
     return this;
   }
 
   public ExercisePage selectExercisePage() {
-    mainMenuComponent.select(MenuSectionsData.EXERCISE);
+    menuComponent.select(MenuSectionsData.EXERCISE);
     return exercisePage;
   }
 
   public StatsPage selectStatsPage() {
-    mainMenuComponent.select(MenuSectionsData.STATS);
+    menuComponent.select(MenuSectionsData.STATS);
     return statsPage;
   }
 }

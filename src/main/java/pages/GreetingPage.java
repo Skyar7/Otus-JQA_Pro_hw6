@@ -1,7 +1,7 @@
 package pages;
 
 import com.google.inject.Inject;
-import data.WelcomePageItemsData;
+import data.GreetingPageElementsData;
 import modules.GuicePagesModule;
 
 import java.util.stream.Collectors;
@@ -17,7 +17,7 @@ public class GreetingPage extends AbsBasePage<GreetingPage> {
   }
 
   public ChatPage greetingPass() {
-    Stream.of(WelcomePageItemsData.values())
+    Stream.of(GreetingPageElementsData.values())
             .map(items -> {
               ifPresent(items.getPageTitle());
               click(items.getButton());

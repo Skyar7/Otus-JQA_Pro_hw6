@@ -3,20 +3,20 @@ package modules;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import components.ChatWindowComponent;
-import components.MainMenuComponent;
+import components.ChatComponent;
+import components.MenuComponent;
 
 public class GuiceComponentsModule extends AbstractModule {
 
   @Provides
   @Singleton
-  public ChatWindowComponent getChatWindowComponent() {
-    return new ChatWindowComponent();
+  public ChatComponent getChatWindowComponent() {
+    return new ChatComponent();
   }
 
   @Provides
   @Singleton
-  public MainMenuComponent getMainMenuComponent() {
-    return new MainMenuComponent();
+  public MenuComponent getMainMenuComponent() {
+    return new MenuComponent();
   }
 }

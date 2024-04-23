@@ -19,7 +19,6 @@ public class AndroidExtension implements BeforeAllCallback, AfterAllCallback {
   public void beforeAll(ExtensionContext extensionContext) {
 
     Guice.createInjector(new GuicePagesModule(), new GuiceComponentsModule());
-
     Configuration.browserSize = null;
     Configuration.browser = AndroidWebDriverProvider.class.getName();
     Configuration.timeout = 200000L;
@@ -36,6 +35,7 @@ public class AndroidExtension implements BeforeAllCallback, AfterAllCallback {
                     .put("REMOTE_URL", System.getProperty("remote.url"))
                     .build(), System.getProperty("user.dir")
                     + "/allure-results/");
+
     Selenide.closeWebDriver();
   }
 }

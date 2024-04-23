@@ -1,6 +1,6 @@
 package data;
 
-public enum WelcomePageItemsData {
+public enum GreetingPageElementsData {
   first("Next", "Chat to improve your English"),
   second("Next", "Learn new words and grammar"),
   third("Skip >", "7 days FREE");
@@ -8,7 +8,7 @@ public enum WelcomePageItemsData {
   private String button;
   private String title;
 
-  WelcomePageItemsData(String button, String title) {
+  GreetingPageElementsData(String button, String title) {
     this.button = button;
     this.title = title;
   }
