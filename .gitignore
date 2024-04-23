@@ -1,5 +1,6 @@
 *.iml
 *.log
 .idea/
+build/
 target/
 allure-results/
