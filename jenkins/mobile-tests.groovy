@@ -1,4 +1,4 @@
-timeout(60) {
+timeout(30) {
     node("maven") {
         wrap([$class: 'BuildUser']) {
             currentBuild.description = """
@@ -6,11 +6,11 @@ build user: ${BUILD_USER}
 branch: ${REFSPEC}
 """
 
-            config = readYaml text: env.YAML_CONFIG ?: null;
+            config = readYaml text: env.YAML_CONFIG
 
             if (config != null) {
                 for (param in config.entrySet()) {
-                    env."${param.getKey()}" = param.getValue()
+                    env.setProperty(param.getKey(), param.getValue())
                 }
             }
         }
@@ -18,22 +18,30 @@ branch: ${REFSPEC}
         stage("Checkout") {
             checkout scm;
         }
+
         stage("Create configuration") {
             sh "echo DEVICE_NAME=${env.getProperty('DEVICE_NAME')} > ./.env"
             sh "echo PLATFORM_NAME=${env.getProperty('PLATFORM_NAME')} >> ./.env"
             sh "echo PLATFORM_VERSION=${env.getProperty('PLATFORM_VERSION')} >> ./.env"
             sh "echo REMOTE_URL=${env.getProperty('REMOTE_URL')} >> ./.env"
         }
-        stage("Run mobile tests") {
-            sh "mkdir ./reports"
-            sh "docker run --rm --env-file -v ./reports:root/mobile_tests_allure-results ./.env -t mobile_tests:${env.getProperty('TEST_VERSION')}"
+
+        stage("Mobile tests in docker image") {
+            sh "docker run --rm \
+            --network=host --env-file ./.env \
+            -v /root/.m2/repository:/root/.m2/repository \
+            -v ./surefire-reports:/home/ubuntu/mobile_tests/target/surefire-reports \
+            -v ./allure-results:/home/ubuntu/mobile_tests/target/allure-results \
+            -t localhost:5005/mobile_tests:${env.getProperty('TEST_VERSION')}"
         }
-        stage("Publish allure results") {
-            REPORT_DISABLE = Boolean.parseBoolean(env.getProperty('REPORT_DISABLE')) ?: false
+
+        stage("Publish Allure Reports") {
             allure([
+                    includeProperties: false,
+                    jdk: '',
+                    properties: [],
                     reportBuildPolicy: 'ALWAYS',
-                    results: ["./reports", "./allure-results"],
-                    disabled: REPORT_DISABLE
+                    results: [[path: './allure-results']]
             ])
         }
     }
